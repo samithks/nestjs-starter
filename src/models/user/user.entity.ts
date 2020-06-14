@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
-import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, Unique, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Gender } from './user.enum';
+import { RoleMapping } from '../role-mapping/role-mapping.entity';
 
 @Entity()
 export class User {
@@ -74,4 +75,8 @@ export class User {
     { name: 'is_deleted', default: false }
   )
   isDeleted: boolean;
+
+  @OneToMany(type => RoleMapping, roleMapping => roleMapping.user)
+  roleMapping: RoleMapping[]
+
 }
