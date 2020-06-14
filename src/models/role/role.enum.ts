@@ -1,0 +1,1 @@
+export enum Name { user = 'user', admin = 'admin' };
