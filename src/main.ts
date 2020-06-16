@@ -31,16 +31,16 @@ async function bootstrap() {
     maxFiles: 10,
     path: path.join(__dirname, '../../logs')
   });
-  app.use(responseTime());
-  app.use(morgan('combined', { stream: accessLogStream }));
-  app.use(helmet());
-  app.use(compression());
+  app.use(responseTime()); // records the response time for requests in HTTP servers.
+  app.use(morgan('combined', { stream: accessLogStream })); // HTTP request logger
+  app.use(helmet()); // secure your Express app
+  app.use(compression()); // compress response bodies for all request
   app.use(
     expressRateLimit({
       windowMs: 5 * 60 * 1000, // 15 minutes
       max: 100, // limit each IP to 100 requests per windowMs
     }),
-  );
+  ); //  Use to limit repeated requests to APIs
   SwaggerModule.setup('api', app, document);
   await app.listen(configService.get<number>('PORT'));
   console.log(`Application is running on: ${await app.getUrl()}`);
