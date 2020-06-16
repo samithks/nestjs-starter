@@ -9,6 +9,7 @@ import compression from 'compression';
 import expressRateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import responseTime from 'response-time';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -42,6 +43,7 @@ async function bootstrap() {
     }),
   ); //  Use to limit repeated requests to APIs
   SwaggerModule.setup('api', app, document);
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(configService.get<number>('PORT'));
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
