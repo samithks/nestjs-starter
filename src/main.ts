@@ -5,6 +5,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { createStream } from 'rotating-file-stream';
 import path from 'path';
 import morgan from 'morgan';
+import compression from 'compression';
+import expressRateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import responseTime from 'response-time';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -27,7 +31,16 @@ async function bootstrap() {
     maxFiles: 10,
     path: path.join(__dirname, '../../logs')
   });
+  app.use(responseTime());
   app.use(morgan('combined', { stream: accessLogStream }));
+  app.use(helmet());
+  app.use(compression());
+  app.use(
+    expressRateLimit({
+      windowMs: 5 * 60 * 1000, // 15 minutes
+      max: 100, // limit each IP to 100 requests per windowMs
+    }),
+  );
   SwaggerModule.setup('api', app, document);
   await app.listen(configService.get<number>('PORT'));
   console.log(`Application is running on: ${await app.getUrl()}`);
