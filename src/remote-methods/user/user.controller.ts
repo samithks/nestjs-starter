@@ -39,7 +39,12 @@ export class UserController {
 
   /**
    * End point to create a user from user object
-   *
+   * 
+   * @api {post} /user/
+   * @apiName register
+   * @apiGroup User
+   * @apiDescription The endpoint to register a user
+   * 
    * @param {CreateUserDto} createUserDto The user object
    * @returns {Promise<IUser>}
    * @memberof UserController
@@ -55,6 +60,11 @@ export class UserController {
   /**
    * Login to a user account
    *
+   * @api {post} /user/login
+   * @apiName login
+   * @apiGroup User
+   * @apiDescription To login to a account
+   * 
    * @param {LoginUserDto} user
    * @returns {Promise<ILoggedIn>}
    * @memberof UserController
@@ -67,12 +77,17 @@ export class UserController {
   /**
    * To delete a user by id
    *
-   * @param {number} id
+   * @api {delete} /user/:id
+   * @apiName deleteUserById
+   * @apiGroup User
+   * @apiDescription To delete a user
+   * 
+   * @param {number} id The user id
    * @returns {Promise<DeleteResult>}
    * @memberof UserController
    */
   @Auth(Name.admin)
-  @Delete()
+  @Delete(':id')
   async deleteUserById(@Param('id', new ParseIntPipe()) id: number): Promise<DeleteResult> {
     return await this.userService.deleteUserById(id);
   }
@@ -80,13 +95,18 @@ export class UserController {
   /**
    * To update the user by id
    *
-   * @param {number} id
+   * @api {patch} /user/:id
+   * @apiName updateUserById
+   * @apiGroup User
+   * @apiDescription To update the user detail
+   * 
+   * @param {number} id The user id
    * @param {IUpdateUserDto} updateUser
    * @returns {Promise<UpdateResult>}
    * @memberof UserController
    */
   @Auth(Name.admin)
-  @Patch()
+  @Patch(':id')
   async updateUserById(@Param('id', new ParseIntPipe()) id: number,
     @Body() updateUser: IUpdateUserDto): Promise<UpdateResult> {
     return await this.userService.updateUserById(id, updateUser);
@@ -94,8 +114,13 @@ export class UserController {
 
   /**
    * To edit the profile of the logged in user
-   *
-   * @param {number} id
+   * 
+   * @api {patch} /user/profile
+   * @apiName updateUserById
+   * @apiGroup User
+   * @apiDescription To update the user detail
+   * 
+   * @param {number} id The user id
    * @param {IUpdateUserDto} updateUser
    * @returns {Promise<UpdateResult>}
    * @memberof UserController
@@ -109,8 +134,13 @@ export class UserController {
 
   /**
    * To get the details of the logged in user
-   *
-   * @param {number} id
+   * 
+   * @api {patch} /user/profile/me
+   * @apiName getMyProfile
+   * @apiGroup User
+   * @apiDescription To get the details of the logged in user
+   * 
+   * @param {number} id The user id
    * @returns {Promise<IUser>}
    * @memberof UserController
    */
@@ -121,9 +151,14 @@ export class UserController {
   }
 
   /**
-   *
-   *
-   * @param {number} id
+   * To update the user detail
+   * 
+   * @api {patch} /user/resend-verification
+   * @apiName sendEmailVerification
+   * @apiGroup User
+   * @apiDescription To update the user detail
+   * 
+   * @param {number} id The user id
    * @returns {Promise<any>}
    * @memberof UserController
    */
@@ -135,8 +170,13 @@ export class UserController {
 
   /**
    * To verify the email
-   *
-   * @param {string} token
+   * 
+   * @api {patch} /user/verify-email
+   * @apiName verifyEmail
+   * @apiGroup User
+   * @apiDescription To verify the email
+   * 
+   * @param {string} token The token for email verification
    * @returns {Promise<IEmailVerified>}
    * @memberof UserController
    */
@@ -148,10 +188,15 @@ export class UserController {
 
   /**
    * To change the password by old password
-   *
-   * @param {string} username
-   * @param {string} oldPassword
-   * @param {string} newPassword
+   * 
+   * @api {patch} /user/password/change
+   * @apiName changePassword
+   * @apiGroup User
+   * @apiDescription To change the password by old password
+   * 
+   * @param {string} username The username of the user
+   * @param {string} oldPassword The old password
+   * @param {string} newPassword The new password
    * @returns {Promise<UpdateResult>}
    * @memberof UserController
    */
@@ -164,8 +209,13 @@ export class UserController {
 
   /**
    * To reset the email address
-   *
-   * @param {string} email
+   * 
+   * @api {patch} /user/password/reset
+   * @apiName resetPassword
+   * @apiGroup User
+   * @apiDescription To reset the email address
+   * 
+   * @param {string} email The email address
    * @returns {Promise<string>}
    * @memberof UserController
    */
